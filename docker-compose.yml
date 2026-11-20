@@ -5,7 +5,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: localpass
       MYSQL_DATABASE: bloodlink
-    ports: ["3306:3306"]
     volumes:
       - ./database:/docker-entrypoint-initdb.d:ro   # schema + sample data
     healthcheck:
