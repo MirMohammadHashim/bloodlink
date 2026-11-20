@@ -1,0 +1,17 @@
+{
+  "name": "bloodlink-api",
+  "version": "1.0.0",
+  "description": "Application tier for BloodLink - a blood donor finder",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql2": "^3.11.5"
+  }
+}

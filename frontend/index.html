@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BloodLink — find blood donors near you</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <h1><span class="drop" aria-hidden="true"></span>BloodLink</h1>
+      <p>Find eligible, compatible blood donors in your city in seconds — not hours of forwarded messages.</p>
+    </div>
+  </header>
+
+  <nav class="tabs wrap" role="tablist">
+    <button class="tab active" data-tab="find" role="tab">Find donors</button>
+    <button class="tab" data-tab="requests" role="tab">Urgent requests</button>
+    <button class="tab" data-tab="donate" role="tab">Become a donor</button>
+  </nav>
+
+  <main class="wrap">
+    <!-- Find donors -->
+    <section id="find" class="panel active">
+      <form id="search-form" class="card row">
+        <label>Patient's blood group
+          <select name="bloodGroup" class="blood-groups" required></select>
+        </label>
+        <label>City
+          <input name="city" placeholder="e.g. Pune" required />
+        </label>
+        <button type="submit">Search</button>
+      </form>
+      <p id="search-summary" class="muted"></p>
+      <ul id="donor-list" class="results"></ul>
+    </section>
+
+    <!-- Urgent requests -->
+    <section id="requests" class="panel">
+      <div class="card">
+        <h2>Post an urgent request</h2>
+        <form id="request-form" class="grid">
+          <label>Patient name <input name="patientName" required /></label>
+          <label>Blood group <select name="bloodGroup" class="blood-groups" required></select></label>
+          <label>Units needed <input name="units" type="number" min="1" max="20" value="1" required /></label>
+          <label>Hospital <input name="hospital" required /></label>
+          <label>City <input name="city" required /></label>
+          <label>Contact phone <input name="contactPhone" type="tel" required /></label>
+          <label>Needed by <input name="neededBy" type="date" required /></label>
+          <button type="submit">Post request</button>
+        </form>
+        <p class="form-msg" id="request-msg"></p>
+      </div>
+
+      <form id="request-filter" class="row filter">
+        <input name="city" placeholder="Filter by city (optional)" />
+        <button type="submit" class="secondary">Show requests</button>
+      </form>
+      <ul id="request-list" class="results"></ul>
+    </section>
+
+    <!-- Become a donor -->
+    <section id="donate" class="panel">
+      <div class="card">
+        <h2>Register as a donor</h2>
+        <p class="muted">You'll only appear in searches when you're eligible — at least 90 days after your last donation.</p>
+        <form id="donor-form" class="grid">
+          <label>Full name <input name="name" required /></label>
+          <label>Blood group <select name="bloodGroup" class="blood-groups" required></select></label>
+          <label>City <input name="city" required /></label>
+          <label>Phone <input name="phone" type="tel" required /></label>
+          <label>Last donation date (if any) <input name="lastDonationDate" type="date" /></label>
+          <label class="check">
+            <input type="checkbox" name="consent" required />
+            I agree that my name and phone number are shown to people searching for blood.
+          </label>
+          <button type="submit">Register</button>
+        </form>
+        <p class="form-msg" id="donor-msg"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap muted">
+    Built on AWS: CloudFront + S3 · Application Load Balancer + EC2 Auto Scaling · Amazon RDS for MySQL
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

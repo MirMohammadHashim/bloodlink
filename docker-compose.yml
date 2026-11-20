@@ -1,0 +1,32 @@
+# Run the whole app locally: `docker compose up`, then open http://localhost:3000
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: localpass
+      MYSQL_DATABASE: bloodlink
+    ports: ["3306:3306"]
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d:ro   # schema + sample data
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-plocalpass"]
+      interval: 5s
+      retries: 20
+
+  api:
+    image: node:20-alpine
+    working_dir: /app/backend
+    command: sh -c "npm install && npm start"
+    volumes:
+      - ./:/app
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: localpass
+      DB_NAME: bloodlink
+      SERVE_FRONTEND: "true"
+      FRONTEND_DIR: /app/frontend
+    ports: ["3000:3000"]
+    depends_on:
+      db:
+        condition: service_healthy

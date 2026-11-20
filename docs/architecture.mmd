@@ -1,0 +1,28 @@
+flowchart LR
+    U["👤 Users<br/>(patients' families, donors)"] -->|HTTPS| CF["Amazon CloudFront<br/>CDN + HTTPS"]
+
+    subgraph T1["Tier 1 · Presentation"]
+        S3["Amazon S3<br/>HTML / CSS / JS<br/>(private, OAC)"]
+    end
+
+    CF -->|"/* static"| S3
+    CF -->|"/api/* + secret header"| ALB
+
+    subgraph VPC["Amazon VPC 10.0.0.0/16 · 2 Availability Zones"]
+        subgraph PUB["Public subnets"]
+            ALB["Application<br/>Load Balancer"]
+            NAT["NAT Gateway"]
+        end
+        subgraph T2["Tier 2 · Application (private subnets)"]
+            ASG["EC2 Auto Scaling Group<br/>Node.js + Express API<br/>t3.micro · 1–4 instances"]
+        end
+        subgraph T3["Tier 3 · Data (isolated subnets)"]
+            RDS[("Amazon RDS<br/>MySQL 8")]
+        end
+        ALB -->|":3000"| ASG
+        ASG -->|":3306"| RDS
+        ASG -.->|"npm, git"| NAT
+    end
+
+    SM["AWS Secrets Manager<br/>DB credentials"] -.-> ASG
+    SSM["SSM Session Manager<br/>(no SSH)"] -.-> ASG
